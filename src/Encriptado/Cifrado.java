@@ -22,7 +22,6 @@ public class Cifrado {
     private final String ENTRADA;
     private String salida;
     private final int LLAVE = 3; //Posiciones de desplazado
-    private final char[] NUMBERS = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
     public Cifrado(String entry) {
         ENTRADA = entry;
@@ -44,11 +43,9 @@ public class Cifrado {
     private void desplazar() {
         char salidaNew[] = new char[ENTRADA.length()];
         String salidaNueva = "";
-        String caracter;
 
         for (int i = 0; i < ENTRADA.length(); i++) {
-            caracter = String.valueOf(ENTRADA.charAt(i));
-            if (caracter.hashCode() >= 48 && caracter.hashCode() <= 57) {
+            if (ENTRADA.charAt(i) >= 48 && ENTRADA.charAt(i) <= 57) { //Si es un valor numerico, este no se desplazara 
                 salidaNew[i] = (char) (ENTRADA.charAt(i)); //Sumamos los valores ASCII y lo almacenamos en la nueva entrada.
 
             } else {
@@ -82,12 +79,13 @@ public class Cifrado {
         char salidaNew[] = new char[salida.length()];
         String salidaNueva = "";
         for (int i = 0; i < salida.length(); i++) {
-            if (i >= (salida.length() / 2)) {
+            boolean numeros = salida.charAt(i) >= 48 && salida.charAt(i) <= 57;
+            if (i >= (salida.length() / 2) && !numeros) {
                 salidaNew[i] += (char) (salida.charAt(i) - 1); //Se desplaza -1
             } else {
                 salidaNew[i] = salida.charAt(i);
             }
-            salidaNueva += salidaNew[i]; //Se va almacenar la primer mitad de caracteres
+            salidaNueva += salidaNew[i]; //Se va almacenar la primer mitad de caracteres o si contiene un caracter numerico
         }
         salida = salidaNueva;
 

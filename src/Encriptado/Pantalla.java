@@ -148,7 +148,7 @@ public class Pantalla extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 txt.escribirFichero(aEntrada.getText());
                 contenidoTXT = txt.leerFichero();
-                aEncrypt.setText(new Cifrado(contenidoTXT).getSalida());
+                aEncrypt.setText(new Cifrado(aEntrada.getText()).getSalida());
                 lTxtPath.setText("Texto path: " + txt.getPath());
                 JOptionPane.showMessageDialog(null, "Su entrada ha sido guardada exitosamente");
             }

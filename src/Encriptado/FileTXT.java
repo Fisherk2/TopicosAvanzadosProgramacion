@@ -68,7 +68,7 @@ public class FileTXT {
 
             while (cadena != null) {// Si no hay vacios en nuestro archivos, entonces se tiene que seguir leyendo el archivo
 
-                System.out.println("\n" + cadena);
+                System.out.println(cadena + "\n");
                 contenido += cadena + "\n";
                 cadena = lectura.readLine(); // Volvera a leer la siguiente linea hasta encontrar con un vacio
             }

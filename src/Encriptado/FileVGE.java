@@ -63,8 +63,8 @@ public class FileVGE {
             cadena = lectura.readLine(); //Leera la primer linea que se encuentra en el fichero hasta que llegue a un null
 
             while (cadena != null) {//Si no hay vacios en nuestro archivos, entonces se tiene que seguir leyendo el archivo
-                System.out.println(cadena);
-                contenido += cadena;
+                System.out.println(cadena + "\n");
+                contenido += cadena + "\n";
                 cadena = lectura.readLine(); //Volvera a leer la siguiente linea hasta encontrar con un vacio
             }
 
