@@ -22,6 +22,7 @@ public class Cifrado {
     private final String ENTRADA;
     private String salida;
     private final int LLAVE = 3; //Posiciones de desplazado
+    private final char[] NUMBERS = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
     public Cifrado(String entry) {
         ENTRADA = entry;
@@ -43,9 +44,16 @@ public class Cifrado {
     private void desplazar() {
         char salidaNew[] = new char[ENTRADA.length()];
         String salidaNueva = "";
+        String caracter;
 
         for (int i = 0; i < ENTRADA.length(); i++) {
-            salidaNew[i] = (char) (ENTRADA.charAt(i) + LLAVE); //Sumamos los valores ASCII y lo almacenamos en la nueva entrada.
+            caracter = String.valueOf(ENTRADA.charAt(i));
+            if (caracter.hashCode() >= 48 && caracter.hashCode() <= 57) {
+                salidaNew[i] = (char) (ENTRADA.charAt(i)); //Sumamos los valores ASCII y lo almacenamos en la nueva entrada.
+
+            } else {
+                salidaNew[i] = (char) (ENTRADA.charAt(i) + LLAVE); //Sumamos los valores ASCII y lo almacenamos en la nueva entrada.
+            }
             salidaNueva += salidaNew[i]; //La salida sera con los caracteres ya cambiados por la llave.
         }
         salida = salidaNueva;
