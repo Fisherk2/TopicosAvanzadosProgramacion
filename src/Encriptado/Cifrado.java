@@ -19,76 +19,115 @@ package Encriptado;
  */
 public class Cifrado {
 
-    private final String ENTRADA;
+    private final String[] LINEAS;
+    private String[] lineasCifradas;
     private String salida;
     private final int LLAVE = 3; //Posiciones de desplazado
 
-    public Cifrado(String entry) {
-        ENTRADA = entry;
+    public Cifrado(String entrada) {
         salida = "";
-        desplazar();
-        invertir();
-        moverIzq();
+        LINEAS = entrada.split("\n");
 
     }
 
-    public String getSalida() {
+    public String getSalidaCifrada() {
+        for (String linea : encriptar()) {
+            salida += linea + "\n";
+        }
+
         return salida;
     }
 
-    /**
-     * Se desplaza en N posiciones hacia la DERECHA, de acuerdo con la tabla
-     * ASCII.
-     */
-    private void desplazar() {
-        char salidaNew[] = new char[ENTRADA.length()];
-        String salidaNueva = "";
+    public String getSalidaDescifrada() {
+        for (String linea : desEncriptar()) {
+            salida += linea + "\n";
+        }
 
-        for (int i = 0; i < ENTRADA.length(); i++) {
-            if (ENTRADA.charAt(i) >= 48 && ENTRADA.charAt(i) <= 57) { //Si es un valor numerico, este no se desplazara 
-                salidaNew[i] = (char) (ENTRADA.charAt(i)); //Sumamos los valores ASCII y lo almacenamos en la nueva entrada.
+        return salida;
+    }
 
-            } else {
-                salidaNew[i] = (char) (ENTRADA.charAt(i) + LLAVE); //Sumamos los valores ASCII y lo almacenamos en la nueva entrada.
+    private String[] encriptar() {
+        lineasCifradas = new String[LINEAS.length];
+        for (int i = 0; i < LINEAS.length; i++) { //Lineas = i, Caracteres = j
+            //DESPLAZAR
+            char lineaChar[] = new char[LINEAS[i].length()];
+            String lineaNueva = ""; //Variable de apoyo
+
+            for (int j = 0; j < LINEAS[i].length(); j++) {
+                if (LINEAS[i].charAt(j) >= 48 && LINEAS[i].charAt(j) <= 57) { //Si es un valor numerico, este no se desplazara 
+                    lineaChar[j] = (char) (LINEAS[i].charAt(j)); //Sumamos los valores ASCII y lo almacenamos en la nueva entrada.
+
+                } else {
+                    lineaChar[j] = (char) (LINEAS[i].charAt(j) + LLAVE); //Sumamos los valores ASCII y lo almacenamos en la nueva entrada.
+                }
+                lineaNueva += lineaChar[j]; //La salida sera con los caracteres ya cambiados por la llave.
             }
-            salidaNueva += salidaNew[i]; //La salida sera con los caracteres ya cambiados por la llave.
-        }
-        salida = salidaNueva;
-    }
+            lineasCifradas[i] = lineaNueva; //Agregamos las lineas desplazadas al nuevo arreglo
 
-    /**
-     * Se invierte el orden de escritura inicial de caracteres ya desplazado
-     * (ABC -> CBA).
-     */
-    private void invertir() {
-        char salidaNew[] = new char[salida.length()];
-        String salidaNueva = "";
-        for (int i = salida.length() - 1; i > -1; i--) {
-            salidaNew[i] = salida.charAt(i); //Invertimos los valores ASCII y lo almacenamos en la nueva entrada.
-            salidaNueva += salidaNew[i]; //La salida sera con los caracteres ya cambiados por la llave.
-        }
-        salida = salidaNueva;
-
-    }
-
-    /**
-     * A la mitad en adelante de caracteres, se desplaza en 1 posicion hacia la
-     * IZQUIERDA de acuerdo con la tabla ASCII.
-     */
-    private void moverIzq() {
-        char salidaNew[] = new char[salida.length()];
-        String salidaNueva = "";
-        for (int i = 0; i < salida.length(); i++) {
-            boolean numeros = salida.charAt(i) >= 48 && salida.charAt(i) <= 57;
-            if (i >= (salida.length() / 2) && !numeros) {
-                salidaNew[i] += (char) (salida.charAt(i) - 1); //Se desplaza -1
-            } else {
-                salidaNew[i] = salida.charAt(i);
+            //INVERTIR
+            lineaNueva = ""; //Variable de apoyo
+            for (int j = lineasCifradas[i].length() - 1; j > -1; j--) {
+                lineaChar[j] = lineasCifradas[i].charAt(j); //Invertimos los valores ASCII y lo almacenamos en la nueva entrada.
+                lineaNueva += lineaChar[j]; //La salida sera con los caracteres ya cambiados por la llave.
             }
-            salidaNueva += salidaNew[i]; //Se va almacenar la primer mitad de caracteres o si contiene un caracter numerico
-        }
-        salida = salidaNueva;
+            lineasCifradas[i] = lineaNueva;
 
+            //MOVER IZQUIERDA
+            lineaNueva = ""; //Variable de apoyo
+            for (int j = 0; j < lineasCifradas[i].length(); j++) {
+                boolean numeros = lineasCifradas[i].charAt(j) >= 48 && lineasCifradas[i].charAt(j) <= 57;
+                if (j >= (lineasCifradas[i].length() / 2) && !numeros) {
+                    lineaChar[j] = (char) (lineasCifradas[i].charAt(j) - 1); //Se desplaza -1
+                } else {
+                    lineaChar[j] = lineasCifradas[i].charAt(j);
+                }
+                lineaNueva += lineaChar[j]; //Se va almacenar la primer mitad de caracteres o si contiene un caracter numerico
+            }
+            lineasCifradas[i] = lineaNueva;
+        }//CICLO DE LINEA POR LINEA
+        return lineasCifradas;
     }
 
+    private String[] desEncriptar() {
+        lineasCifradas = new String[LINEAS.length];
+        for (int i = 0; i < LINEAS.length; i++) { //Lineas = i, Caracteres = j
+            //MOVER DERECHA
+            char lineaChar[] = new char[LINEAS[i].length()];
+            String lineaNueva = ""; //Variable de apoyo
+
+            for (int j = 0; j < LINEAS[i].length(); j++) {
+                boolean numeros = LINEAS[i].charAt(j) >= 48 && LINEAS[i].charAt(j) <= 57;
+                if (j >= (LINEAS[i].length() / 2) && !numeros) {
+                    lineaChar[j] = (char) (LINEAS[i].charAt(j) + 1); //Se desplaza +1
+                } else {
+                    lineaChar[j] = LINEAS[i].charAt(j);
+                }
+                lineaNueva += lineaChar[j]; //Se va almacenar la primer mitad de caracteres o si contiene un caracter numerico
+            }
+            lineasCifradas[i] = lineaNueva;
+
+            //REINVERTIR
+            lineaNueva = ""; //Variable de apoyo
+            for (int j = lineasCifradas[i].length() - 1; j > -1; j--) {
+                lineaChar[j] = lineasCifradas[i].charAt(j); //Invertimos los valores ASCII y lo almacenamos en la nueva entrada.
+                lineaNueva += lineaChar[j]; //La salida sera con los caracteres ya cambiados por la llave.
+            }
+            lineasCifradas[i] = lineaNueva;
+
+            //DESPLAZAR
+            lineaNueva = ""; //Variable de apoyo
+            for (int j = 0; j < lineasCifradas[i].length(); j++) {
+                if (lineasCifradas[i].charAt(j) >= 48 && lineasCifradas[i].charAt(j) <= 57) { //Si es un valor numerico, este no se desplazara 
+                    lineaChar[j] = (char) (lineasCifradas[i].charAt(j)); //Restamos los valores ASCII y lo almacenamos en la nueva entrada.
+
+                } else {
+                    lineaChar[j] = (char) (lineasCifradas[i].charAt(j) - LLAVE); //Restamos los valores ASCII y lo almacenamos en la nueva entrada.
+                }
+                lineaNueva += lineaChar[j]; //La salida sera con los caracteres ya cambiados por la llave.
+            }
+            lineasCifradas[i] = lineaNueva; //Agregamos las lineas desplazadas al nuevo arreglo
+        }//CICLO DE LINEA POR LINEA
+
+        return lineasCifradas;
+    }
 }

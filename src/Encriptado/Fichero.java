@@ -14,45 +14,46 @@ import java.io.IOException;
 import javax.swing.JOptionPane;
 
 /**
- * Clase que genera un fichero .TXT que ademas actualiza y lee su contenido.
+ * Clase que genera un fichero que ademas actualiza y lee su contenido.
  *
  * @author Fisherk2
  */
-public class FileTXT {
+public class Fichero {
 
-    private File txt;
+    private File archivo;
+    private final String NAME_FILE, FORMATO;
 
-    public FileTXT() {
+    public Fichero(String nombreArchivo, String formato) {
+        NAME_FILE = nombreArchivo;
+        FORMATO = formato;
         creacionFichero();
     }
 
     private void creacionFichero() {
         try {
-            txt = new File(
-                    "C:\\Users\\msi\\Desktop\\ITL\\5to semestre\\Topicos Avanzados de programacion\\Topicos Programacion\\Entrada.txt");
-            if (txt.createNewFile()) {// Si el archivo a sido creado, enviara un mensaje
-                System.out.println("\n---------------------------\n"
-                        + "El archivo TXT se ha creado exitosamente");
+            archivo = new File(NAME_FILE + FORMATO); //RUTA RELATIVA, se encuentra en la carpeta del proyecto.
+
+            if (archivo.createNewFile()) {// Si el archivo a sido creado, enviara un mensaje
+                System.out.println("El archivo " + FORMATO + " se ha creado exitosamente");
+
             }
         } catch (IOException ex) { // serr + tabulador = System.err.println();
             System.err.println("NO SE PUDO CREAR EL ARCHIVO " + ex);
             JOptionPane.showMessageDialog(null,
-                    "ERROR, EL ARCHIVO NO PUEDE CREARSE, VERIFIQUE BIEN LA DIRECCION ABSOLUTA DEL FICHERO");
+                    "ERROR, EL ARCHIVO NO PUEDE CREARSE, VERIFIQUE BIEN LA DIRECCION DEL FICHERO");
         }
     }
 
     public void escribirFichero(String entrada) {
         try {
-            FileWriter escribir = new FileWriter(txt);
+            FileWriter escribir = new FileWriter(archivo);
             escribir.write(entrada);
-            // Siempre que se va utilizar la clase FileWriter se debe cerrar el archivo
-            // cuando se termine de utilizar.
             escribir.close();
 
         } catch (IOException ex) {
             System.err.println("ERROR, EL ARCHIVO NO SE PUDO ESCRIBIR SOBRE EL ARCHIVO " + ex);
             JOptionPane.showMessageDialog(null,
-                    "ERROR, EL ARCHIVO NO PUEDE ESCRIBIRSE, VERIFIQUE BIEN LA DIRECCION ABSOLUTA DEL FICHERO");
+                    "ERROR, EL ARCHIVO NO PUEDE ESCRIBIRSE, VERIFIQUE BIEN LA DIRECCION DEL FICHERO");
         }
 
     }
@@ -61,14 +62,10 @@ public class FileTXT {
         String cadena;
         String contenido = "";
         try {
-            FileReader lector = new FileReader(txt);
+            FileReader lector = new FileReader(archivo);
             BufferedReader lectura = new BufferedReader(lector);
-
-            cadena = lectura.readLine(); // Leera la primer linea que se encuentra en el fichero hasta que llegue a un null
-
+            cadena = lectura.readLine(); // Leera la primer linea que se encuentra en el fichero
             while (cadena != null) {// Si no hay vacios en nuestro archivos, entonces se tiene que seguir leyendo el archivo
-
-                System.out.println(cadena + "\n");
                 contenido += cadena + "\n";
                 cadena = lectura.readLine(); // Volvera a leer la siguiente linea hasta encontrar con un vacio
             }
@@ -88,7 +85,7 @@ public class FileTXT {
     }
 
     public String getPath() {
-        return txt.getPath();
+        return archivo.getAbsolutePath();
     }
 
 }
